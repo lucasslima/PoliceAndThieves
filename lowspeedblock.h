@@ -1,6 +1,6 @@
 #ifndef LOWSPEEDBLOCK_H
 #define LOWSPEEDBLOCK_H
-
+#include "block.h"
 
 class LowSpeedBlock : public Block
 {
