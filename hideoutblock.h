@@ -2,10 +2,10 @@
 #define HIDEOUTBLOCK_H
 #include "block.h"
 
-class HideOutBlock : public Block
+class HideoutBlock : public Block
 {
 public:
-    HideOutBlock();
+    HideoutBlock();
 };
 
 #endif // HIDEOUTBLOCK_H

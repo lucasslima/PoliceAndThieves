@@ -1,6 +1,6 @@
 #include "hideoutblock.h"
 
-HideOutBlock::HideOutBlock()
+HideoutBlock::HideoutBlock()
 {
 
 }
