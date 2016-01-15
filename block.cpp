@@ -9,7 +9,7 @@ double Block::getMAXSPEED() const
     return MAXSPEED;
 }
 
-bool Block::getIS_SOLID() const
+bool Block::isSolid() const
 {
     return IS_SOLID;
 }

@@ -2,12 +2,12 @@
 #define WORLD_H
 #include <vector>
 #include <string>
-
+#include "drawutils.h"
 #include "block.h"
 
 using std::vector;
 using std::string;
-
+using namespace DrawUtils;
 class World
 {
 public:
@@ -20,6 +20,7 @@ public:
 
 private:
     vector<vector<Block*> > mStreets;
+    Point origin;
 };
 
 #endif // WORLD_H

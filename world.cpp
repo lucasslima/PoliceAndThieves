@@ -33,7 +33,8 @@ void World::initializeRendering()
     glLoadIdentity();
     double worldHeight = mStreets.size() * 10;
     double worldWidth = mStreets[0].size() * 10;
-    gluOrtho2D(-worldWidth/2, worldWidth, -worldHeight/2, worldHeight);
+    origin = Point(-worldWidth/2,worldHeight/2);
+    gluOrtho2D(-worldWidth/2, worldWidth/2, -worldHeight/2, worldHeight/2);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -80,19 +81,26 @@ void World::render(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glLoadIdentity();
-    glTranslatef(x, y, 0.0);
-    glRotatef(teta, 0.0,0.0,1.0);
-    glColor3d(1.0,0.0,0.0);
     quadrado();
+    Point pen(origin.getX(),origin.getY());
+    for (std::vector<Block*> v : mStreets){
+        for (Block* b : v){
+            if (b->isSolid()){
+                std::vector<Point> blockDrawPoints;
 
-    glLoadIdentity();
-    glTranslatef(x, y, 0.0);
-    glRotatef(-teta, 0.0,0.0,1.0);
-    glScalef(0.7, 0.7, 0.7);
-    glColor3d(0.0,1.0,0.0);
-    quadrado();
-
+                blockDrawPoints.push_back(Point(pen.getX(),pen.getY()-10));
+                blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()-10));
+                blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()));
+                blockDrawPoints.push_back(Point(pen) );
+                glColor3d(1.0,1.0,0.0);
+                DrawUtils::drawPoligon(blockDrawPoints);
+            }
+            pen.setX(pen.getX() + 10);
+            if (b == v.back())
+                pen.setX(-165);
+        }
+        pen.setY(pen.getY() - 10);
+    }
     glFlush();
     glutSwapBuffers();
 }

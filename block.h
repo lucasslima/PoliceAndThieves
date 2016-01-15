@@ -8,7 +8,7 @@ public:
     Block(double maxSpeed, bool isSolid);
     virtual ~Block();
     double getMAXSPEED() const;
-    bool getIS_SOLID() const;
+    bool isSolid() const;
     const double BOCK_SIZE = 10;
 protected:
     const double MAXSPEED;

@@ -41,21 +41,36 @@ public:
     return coordinates[1];
   }
 
+  void setX(GLdouble x) {
+    if (coordinates == nullptr)
+      throw new UninitializedPointException;
+    coordinates[0] = x;
+  }
+
+  void setY(GLdouble y) {
+    if (coordinates == nullptr)
+      throw new UninitializedPointException;
+    coordinates[1] = y;
+  }
   GLdouble *getCoordinates() {
     if (coordinates == nullptr)
       throw new UninitializedPointException;
     return coordinates;
+  }
+   Point& operator=(const Point &rhs){
+       if ( this == &rhs)
+           return *this;
+       if (this->coordinates == nullptr)
+           coordinates = new GLdouble[2];
+       coordinates[0] = rhs.coordinates[0];
+       coordinates[1] = rhs.coordinates[1];
+       return *this;
   }
 
 private:
   GLdouble *coordinates;
 };
 
-void drawPoligon(vector<Point> &points) {
-  glBegin(GL_POLYGON);
-  for (Point p : points)
-    glVertex2dv(p.getCoordinates());
-  glEnd();
-}
+void drawPoligon(std::vector<Point> &points);
 }
 #endif // DRAWUTILS_H
