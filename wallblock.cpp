@@ -1,6 +1,6 @@
 #include "wallblock.h"
 
-WallBlock::WallBlock()
+WallBlock::WallBlock():Block(0,true)
 {
 
 }

@@ -13,8 +13,10 @@ class World
 public:
     World();
     void loadStreets(string pathToMap);
+    void initializeRendering();
     void update();
-    void render();
+    void render(void);
+    ~World();
 
 private:
     vector<vector<Block*> > mStreets;

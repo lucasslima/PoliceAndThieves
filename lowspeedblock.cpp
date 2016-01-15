@@ -1,6 +1,6 @@
 #include "lowspeedblock.h"
 
-LowSpeedBlock::LowSpeedBlock()
+LowSpeedBlock::LowSpeedBlock():Block(8.33333,false)
 {
 
 }
