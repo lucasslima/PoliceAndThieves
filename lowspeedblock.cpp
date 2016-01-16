@@ -4,3 +4,9 @@ LowSpeedBlock::LowSpeedBlock():Block(8.33333,false)
 {
 
 }
+
+void LowSpeedBlock::draw(){
+
+}
+
+

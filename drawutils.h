@@ -28,6 +28,11 @@ public:
     coordinates[0] = x;
     coordinates[1] = y;
   }
+  Point(const Point& p) {
+    coordinates = new GLdouble[2];
+    coordinates[0] = p.coordinates[0];
+    coordinates[1] = p.coordinates[1];
+  }
 
   GLdouble getX() {
     if (coordinates == nullptr)
@@ -66,6 +71,10 @@ public:
        coordinates[1] = rhs.coordinates[1];
        return *this;
   }
+
+   ~Point(){
+       delete coordinates;
+   }
 
 private:
   GLdouble *coordinates;

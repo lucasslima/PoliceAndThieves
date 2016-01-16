@@ -21,6 +21,12 @@ public:
 private:
     vector<vector<Block*> > mStreets;
     Point origin;
+    double mWorldWidth;
+    double mWorldHeight;
+    double mWorldLeft;
+    double mWorldRight;
+    double mWorldTop;
+    double mWorldBottom;
 };
 
 #endif // WORLD_H

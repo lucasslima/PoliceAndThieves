@@ -14,6 +14,10 @@ public:
     bool isSolid();
 private:
     const double MAXSPEED = 0;
+
+    // Block interface
+public:
+    void draw();
 };
 
 #endif // WALLBLOCK_H

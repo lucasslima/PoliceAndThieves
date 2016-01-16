@@ -31,10 +31,14 @@ void World::initializeRendering()
         return;
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    double worldHeight = mStreets.size() * 10;
-    double worldWidth = mStreets[0].size() * 10;
-    origin = Point(-worldWidth/2,worldHeight/2);
-    gluOrtho2D(-worldWidth/2, worldWidth/2, -worldHeight/2, worldHeight/2);
+    mWorldHeight = mStreets.size() * 10;
+    mWorldWidth = mStreets[0].size() * 10;
+    origin = Point(-mWorldWidth/2,mWorldHeight/2);
+    mWorldLeft = -mWorldWidth/2;
+    mWorldRight = mWorldWidth/2;
+    mWorldBottom = -mWorldHeight/2;
+    mWorldTop = mWorldHeight/2;
+    gluOrtho2D(mWorldLeft, mWorldRight, mWorldBottom, mWorldTop);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -92,7 +96,7 @@ void World::render(void)
                 blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()-10));
                 blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()));
                 blockDrawPoints.push_back(Point(pen) );
-                glColor3d(1.0,1.0,0.0);
+                glColor3d(0.0,0.0,1.0);
                 DrawUtils::drawPoligon(blockDrawPoints);
             }
             pen.setX(pen.getX() + 10);

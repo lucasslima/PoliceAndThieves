@@ -9,6 +9,10 @@ public:
     LowSpeedBlock();
     // Block interface
 
+
+    // Block interface
+public:
+    void draw();
 };
 
 #endif // LOWSPEEDBLOCK_H

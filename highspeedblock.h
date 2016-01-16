@@ -6,6 +6,10 @@ class HighSpeedBlock : public Block
 {
 public:
     HighSpeedBlock();
+
+    // Block interface
+public:
+    void draw();
 };
 
 #endif // HIGHSPEEDBLOCK_H
