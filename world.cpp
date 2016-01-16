@@ -75,9 +75,8 @@ void World::initializeRendering()
     return;
 }
 
-float x=0.0, y=0.0,        //centro dos quadrados
-      teta=0.0;            //angulo de rotação dos quadrados
-float dx=0.01, dy=0.005;   //vetor que define a direcao
+
+float dx=0.5, dy=0.05;   //vetor que define a direcao
                            //inicial de movimento
 void World::loadStreets(string pathToMap) {
   ifstream mapFile(pathToMap);
@@ -112,9 +111,13 @@ void World::loadStreets(string pathToMap) {
 
 void World::update()
 {
-    x += dx; if (x>20 || x<-20) dx*=-1;
-    y += dy; if (y>20 || y<-20) dy*=-1;
-    teta += 0.1;
+    mPolice.setX(mPolice.getX()-dx);
+//    if (x>20 || x<-20) dx*=-1;
+//    mPolice.setY(mPolice.getY()-dy);
+//    if (y>20 || y<-20) dy*=-1;
+//    teta += 0.1;
+    if (dx < 22.2222)
+        dx+=0.1;
     glutPostRedisplay();
 }
 
