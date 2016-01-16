@@ -11,10 +11,10 @@ public:
     virtual void draw()=0;
     virtual ~Block();
     double getMAXSPEED() const;
-    void setCoordinates(int x, int y);
+    void setCoordinates(double x, double y);
     Point getCoordinates() const;
     bool isSolid() const;
-    const double BOCK_SIZE = 10;
+    static const double BOCK_SIZE;
 protected:
     const double MAXSPEED;
     const bool IS_SOLID;

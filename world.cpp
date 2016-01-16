@@ -40,6 +40,15 @@ void World::initializeRendering()
     mWorldTop = mWorldHeight/2;
     gluOrtho2D(mWorldLeft, mWorldRight, mWorldBottom, mWorldTop);
     glMatrixMode(GL_MODELVIEW);
+    Point p(origin);
+    for ( auto v : mStreets){
+        for (Block* b : v){
+            b->setCoordinates(p.getX(),p.getY());
+            p.setX(p.getX() + Block::BOCK_SIZE);
+        }
+        p.setX(origin.getX());
+        p.setY(p.getY() - Block::BOCK_SIZE);
+    }
 }
 
 float x=0.0, y=0.0,        //centro dos quadrados
@@ -90,14 +99,16 @@ void World::render(void)
     for (std::vector<Block*> v : mStreets){
         for (Block* b : v){
             if (b->isSolid()){
-                std::vector<Point> blockDrawPoints;
+//                std::vector<Point> blockDrawPoints;
 
-                blockDrawPoints.push_back(Point(pen.getX(),pen.getY()-10));
-                blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()-10));
-                blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()));
-                blockDrawPoints.push_back(Point(pen) );
-                glColor3d(0.0,0.0,1.0);
-                DrawUtils::drawPoligon(blockDrawPoints);
+//                blockDrawPoints.push_back(Point(pen.getX(),pen.getY()-10));
+//                blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()-10));
+//                blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()));
+//                blockDrawPoints.push_back(Point(pen) );
+//                glColor3d(0.0,0.0,1.0);
+//                DrawUtils::drawPoligon(blockDrawPoints);
+
+                b->draw();
             }
             pen.setX(pen.getX() + 10);
             if (b == v.back())

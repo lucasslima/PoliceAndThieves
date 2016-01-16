@@ -12,9 +12,10 @@ WallBlock::WallBlock():Block(0,true)
 void WallBlock::draw()
 {
     std::vector<Point> blockDrawPoints;
-
-//    blockDrawPoints.push_back(Point(pen.getX(),pen.getY()-10));
-//    blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()-10));
-//    blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()));
-//    blockDrawPoints.push_back(Point(pen) );
+    blockDrawPoints.push_back(Point(coordinates.getX(),coordinates.getY()-BOCK_SIZE));
+    blockDrawPoints.push_back(Point(coordinates.getX() + BOCK_SIZE, coordinates.getY() -BOCK_SIZE));
+    blockDrawPoints.push_back(Point(coordinates.getX() + BOCK_SIZE,coordinates.getY()));
+    blockDrawPoints.push_back(coordinates);
+    glColor3d(0.0,0.0,1.0);
+    DrawUtils::drawPoligon(blockDrawPoints);
 }
