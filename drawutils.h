@@ -34,13 +34,13 @@ public:
     coordinates[1] = p.coordinates[1];
   }
 
-  GLdouble getX() {
+  GLdouble getX() const{
     if (coordinates == nullptr)
       throw new UninitializedPointException;
     return coordinates[0];
   }
 
-  GLdouble getY() {
+  GLdouble getY() const {
     if (coordinates == nullptr)
       throw new UninitializedPointException;
     return coordinates[1];

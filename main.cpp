@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(1000, 700);
+    glutInitWindowSize(700, 700);
     world.loadStreets("map.txt");
     glutCreateWindow("PoliceAndThieves");
     glutDisplayFunc(render);

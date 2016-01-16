@@ -1,6 +1,6 @@
 #include "block.h"
 
-const double Block::BOCK_SIZE = 10;
+const double Block::BLOCK_SIZE = 10;
 
 Block::Block(double maxSpeed,bool isSolid):MAXSPEED(maxSpeed),IS_SOLID(isSolid) {
 

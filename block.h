@@ -14,7 +14,7 @@ public:
     void setCoordinates(double x, double y);
     Point getCoordinates() const;
     bool isSolid() const;
-    static const double BOCK_SIZE;
+    static const double BLOCK_SIZE;
 protected:
     const double MAXSPEED;
     const bool IS_SOLID;

@@ -13,14 +13,15 @@ using std::ifstream;
 static GLdouble vertices[][2] = {{-1.0,-1.0},{1.0,-1.0},
                           {1.0,1.0}, {-1.0,1.0}};
 
-void quadrado()
+void quadrado(const Point &p)
 {
-    glBegin(GL_POLYGON);
-        glVertex2dv(vertices[0]);
-        glVertex2dv(vertices[1]);
-        glVertex2dv(vertices[2]);
-        glVertex2dv(vertices[3]);
-    glEnd();
+    std::vector<Point> blockDrawPoints;
+    blockDrawPoints.push_back(Point(p.getX(),p.getY()-Block::BLOCK_SIZE));
+    blockDrawPoints.push_back(Point(p.getX() + Block::BLOCK_SIZE, p.getY() -Block::BLOCK_SIZE));
+    blockDrawPoints.push_back(Point(p.getX() + Block::BLOCK_SIZE,p.getY()));
+    blockDrawPoints.push_back(p);
+    glColor3d(0.0,0.0,0.5);
+    DrawUtils::drawPoligon(blockDrawPoints);
 }
 
 World::World() {}
@@ -44,11 +45,34 @@ void World::initializeRendering()
     for ( auto v : mStreets){
         for (Block* b : v){
             b->setCoordinates(p.getX(),p.getY());
-            p.setX(p.getX() + Block::BOCK_SIZE);
+            p.setX(p.getX() + Block::BLOCK_SIZE);
         }
         p.setX(origin.getX());
-        p.setY(p.getY() - Block::BOCK_SIZE);
+        p.setY(p.getY() - Block::BLOCK_SIZE);
     }
+    bool found = false;
+    for (auto v : mStreets){
+        for (Block* b : v){
+            if (!b->isSolid()){
+                mThieve = b->getCoordinates();
+                found = true;
+                break;
+            }
+        }
+        if (found) break;
+    }
+    found = false;
+    for (int i = mStreets.size()-1;i >= 0 ; i--){
+        for (int j = mStreets[i].size() - 1; j >= 0 ; j--){
+            if (!mStreets[i][j]->isSolid()){
+                mPolice = mStreets[i][j]->getCoordinates();
+                found = true;
+                break;
+            }
+        }
+        if (found) break;
+    }
+    return;
 }
 
 float x=0.0, y=0.0,        //centro dos quadrados
@@ -60,8 +84,12 @@ void World::loadStreets(string pathToMap) {
   if (mapFile.is_open()) {
     string line;
     while (getline(mapFile, line)) {
+        bool enclosedStreet = false;
       mStreets.push_back(vector<Block *>());
       for (char c : line) {
+          if (c == ' ' && enclosedStreet == false)
+              continue;
+          enclosedStreet = true;
         switch (c) {
         case ' ':
           mStreets.back().push_back(new HighSpeedBlock());
@@ -77,9 +105,9 @@ void World::loadStreets(string pathToMap) {
           break;
         }
       }
+      enclosedStreet = false;
     }
-    return;
-  }
+   }
 }
 
 void World::update()
@@ -94,28 +122,18 @@ void World::render(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    quadrado();
+    quadrado(mPolice);
     Point pen(origin.getX(),origin.getY());
     for (std::vector<Block*> v : mStreets){
         for (Block* b : v){
-            if (b->isSolid()){
-//                std::vector<Point> blockDrawPoints;
-
-//                blockDrawPoints.push_back(Point(pen.getX(),pen.getY()-10));
-//                blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()-10));
-//                blockDrawPoints.push_back(Point(pen.getX()+10,pen.getY()));
-//                blockDrawPoints.push_back(Point(pen) );
-//                glColor3d(0.0,0.0,1.0);
-//                DrawUtils::drawPoligon(blockDrawPoints);
-
-                b->draw();
-            }
+            b->draw();
             pen.setX(pen.getX() + 10);
             if (b == v.back())
                 pen.setX(-165);
         }
         pen.setY(pen.getY() - 10);
     }
+
     glFlush();
     glutSwapBuffers();
 }

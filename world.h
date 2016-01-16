@@ -21,6 +21,8 @@ public:
 private:
     vector<vector<Block*> > mStreets;
     Point origin;
+    Point mThieve;
+    Point mPolice;
     double mWorldWidth;
     double mWorldHeight;
     double mWorldLeft;
