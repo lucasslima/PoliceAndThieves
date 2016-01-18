@@ -202,7 +202,10 @@ void World::render(void)
 
 
 
-void World::handleInput(char c, int x, int y)
+
+
+
+void World::handleInputKeyboard(char c, int x, int y)
 {
     switch (c){
     case 'w':

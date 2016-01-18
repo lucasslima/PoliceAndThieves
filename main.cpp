@@ -18,7 +18,7 @@ void update() {
 }
 void input(unsigned char c, int x, int y) {
     if (c=='q') exit(0);
-    world.handleInput(c,x,y);
+    world.handleInputKeyboard(c,x,y);
     cout << "Entered key: " << c << endl;
 }
 
