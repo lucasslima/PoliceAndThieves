@@ -34,7 +34,8 @@ private:
     Point origin;
     Point mThieve;
     Point mPolice;
-    const double ACCELERATION = 0.3;
+    const float ACCELERATION = 0.3;
+    const float MAX_SPEED = 2;
     double dx;
     double dy;
     double mWorldWidth;

@@ -23,7 +23,7 @@ void quadrado(const Point &p)
     blockDrawPoints.push_back(Point(p.getX() + 2.5, p.getY() + 2.5));
     blockDrawPoints.push_back(Point(p.getX() + 2.5,p.getY()));
     blockDrawPoints.push_back(p);
-    glColor3d(0.0,0.0,0.5);
+    glColor3d(1.0,0.0,0.0);
     DrawUtils::drawPoligon(blockDrawPoints);
 }
 
@@ -47,22 +47,13 @@ void World::initializeRendering()
     gluOrtho2D(mWorldLeft, mWorldRight, mWorldTop, mWorldBottom);
     glMatrixMode(GL_MODELVIEW);
     Point p(origin);
-    for ( int i = 0 ; i < mStreets.size(); i++){
-        for (int j = 0 ; j < mStreets[i].size(); j++){
-            auto b = mStreets[i][j];
+    for ( auto& v : mStreets){
+        for (auto& b: v){
             b->setCoordinates(p.getX(),p.getY());
-            if (i > 0)
-                b->setNorthNeighbor(mStreets[i-1][j]);
-            if (j > 0)
-                b->setWestNeightbor(mStreets[i][j-1]);
-            if (i < mStreets.size() - 1)
-                b->setSouthNeighbor(mStreets[i+1][j]);
-            if (j < mStreets[i].size() - 1)
-                b->setEastNeightbor(mStreets[i][j+1]);
-            for (auto c = p.getX(); c <= p.getX() + Block::BLOCK_SIZE ; c++){
-                for (auto d = p.getY(); d <= p.getY() + Block::BLOCK_SIZE ; d++){
-                    mCurrentBlock[std::pair<int,int>(c,d)] = b;
-                    mSpatialHash[std::pair<int,int>(c/32,d/32)].push_back(b);
+            for (auto i = p.getX(); i <= p.getX() + Block::BLOCK_SIZE ; i++){
+                for (auto j = p.getY(); j <= p.getY() + Block::BLOCK_SIZE ; j++){
+                    mCurrentBlock[std::pair<int,int>(i,j)] = b;
+                    mSpatialHash[std::pair<int,int>(i/32,j/32)].push_back(b);
                 }
             }
             p.setX(p.getX() + Block::BLOCK_SIZE);
@@ -156,26 +147,24 @@ void World::update()
             mPolice.setY(oldY);
             dx = 0;
             dy = 0;
+        }else{
+            toMove = mCurrentBlock[std::pair<int,int>(mPolice.getX() + 2.5,mPolice.getY())];
+            if (toMove->isSolid()){
+                mPolice.setX(oldX);
+                mPolice.setY(oldY);
+                dx = 0;
+                dy = 0;
+            } else{
+                toMove = mCurrentBlock[std::pair<int,int>(mPolice.getX(),mPolice.getY() + 2.5)];
+                if (toMove->isSolid()){
+                    mPolice.setX(oldX);
+                    mPolice.setY(oldY);
+                    dx = 0;
+                    dy = 0;
+                }
+            }
         }
     }
-//    std::vector<Block*>& neighbors = mSpatialHash[std::pair<int,int>(mPolice.getX()/32,mPolice.getY()/32)];
-//    for (auto& b : neighbors){
-//        const Point& p = b->getCoordinates();
-//        if (b->isSolid()){
-//            if (p.getX() < mPolice.getX() + 2.5 &&
-//               p.getX() + Block::BLOCK_SIZE > mPolice.getX() &&
-//               p.getY() < mPolice.getY() + 2.5 &&
-//               p.getY() + Block::BLOCK_SIZE > mPolice.getY() ) {
-//                std::cout << "collision detected!" << std::endl;
-//                mPolice.setX(oldX);
-//                mPolice.setY(oldY);
-//                dx = 0;
-//                dy = 0;
-//                break;
-//            }
-//        }
-//    }
-    //std::cout << "Police position: " << mPolice.getX() << "," << mPolice.getY() << std::endl;
     glutPostRedisplay();
 }
 
@@ -257,25 +246,25 @@ void World::handleInputKeyboard(char c, int x, int y)
 {
     switch (c){
     case 'w':
-        if ( dy > -1){
+        if ( dy > -MAX_SPEED){
             dx = 0;
             dy -= ACCELERATION;
         }
         break;
     case 's':
-        if (dy < 1){
+        if (dy < MAX_SPEED){
             dx = 0;
             dy += ACCELERATION;
         }
         break;
     case 'd':
-        if (dx < 1){
+        if (dx < MAX_SPEED){
             dx +=ACCELERATION;
             dy = 0;
         }
         break;
     case 'a':
-        if (dx > -1){
+        if (dx > -MAX_SPEED){
             dy = 0;
             dx -= ACCELERATION;
         }
