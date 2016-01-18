@@ -22,6 +22,19 @@ void input(unsigned char c, int x, int y) {
     cout << "Entered key: " << c << endl;
 }
 
+
+void inputMouse(int button, int state,int x, int y){
+
+
+ //  world.handleInputKeyboard(c,x,y);
+   //cout << button << " " <<state<<" " <<x<<" " <<y<<endl;
+
+   world.handleInputMouse(button,  x,  y);
+
+
+}
+
+
 void iniciaOpenGL(void)
 {
     world.initializeRendering();
@@ -37,6 +50,7 @@ int main(int argc, char *argv[])
     glutDisplayFunc(render);
     glutIdleFunc(update);
     glutKeyboardFunc(input);
+    glutMouseFunc(inputMouse);
     iniciaOpenGL();
     glutMainLoop();
     return 0;

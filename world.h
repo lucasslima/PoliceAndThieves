@@ -6,10 +6,12 @@
 #include "block.h"
 #include <utility>
 #include <unordered_map>
+#include <iostream>
 
 using std::vector;
 using std::string;
 using namespace DrawUtils;
+using namespace std;
 
 class World
 {
@@ -20,7 +22,9 @@ public:
     void update();
     void render(void);
 
-    void handleInput( char c, int x, int y);
+    void handleInputKeyboard( char c, int x, int y);
+    void handleInputMouse( int button, int x, int y);
+
     ~World();
 
 private:

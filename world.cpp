@@ -205,6 +205,54 @@ void World::render(void)
 
 
 
+void World::handleInputMouse(int button, int x, int y)
+{
+
+        int widthSize =  glutGet(GLUT_WINDOW_WIDTH);
+        int heightSize = glutGet(GLUT_WINDOW_HEIGHT);
+
+
+        int coordinateX =  x*100 / widthSize;
+        int coordinatey =  y*100 / heightSize;
+        cout << button <<"  " << coordinateX<<" "<<coordinatey << "\n ";
+
+/*
+      switch (button){
+    case 'w':
+        if ( dy > -1){
+            dx = 0;
+            dy -= ACCELERATION;
+        }
+        break;
+    case 's':
+        if (dy < 1){
+            dx = 0;
+            dy += ACCELERATION;
+        }
+        break;
+    case 'd':
+        if (dx < 1){
+            dx +=ACCELERATION;
+            dy = 0;
+        }
+        break;
+    case 'a':
+        if (dx > -1){
+            dy = 0;
+            dx -= ACCELERATION;
+        }
+        break;
+    default:
+        break;
+    }
+
+*/
+
+
+}
+
+
+
 void World::handleInputKeyboard(char c, int x, int y)
 {
     switch (c){
