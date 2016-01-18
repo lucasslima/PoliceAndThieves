@@ -16,8 +16,10 @@ void render(void)
 void update() {
      world.update();
 }
-void teclado(unsigned char c, int xx, int yy) {
+void input(unsigned char c, int x, int y) {
     if (c=='q') exit(0);
+    world.handleInput(c,x,y);
+    cout << "Entered key: " << c << endl;
 }
 
 void iniciaOpenGL(void)
@@ -29,12 +31,12 @@ int main(int argc, char *argv[])
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(700, 700);
+    glutInitWindowSize(1600, 900);
     world.loadStreets("map.txt");
     glutCreateWindow("PoliceAndThieves");
     glutDisplayFunc(render);
     glutIdleFunc(update);
-    glutKeyboardFunc(teclado);
+    glutKeyboardFunc(input);
     iniciaOpenGL();
     glutMainLoop();
     return 0;
