@@ -2,6 +2,7 @@
 #define BLOCK_H
 #include "drawutils.h"
 #include <vector>
+#include <car.h>
 
 using DrawUtils::Point;
 
@@ -16,18 +17,8 @@ public:
     Point getCoordinates() const;
     bool isSolid() const;
     static const double BLOCK_SIZE;
-    Block *getNorthNeighbor() const;
-    void setNorthNeighbor(Block *northNeighbor);
 
-    Block *getSouthNeighbor() const;
-    void setSouthNeighbor(Block *southNeighbor);
-
-    Block *getWestNeightbor() const;
-    void setWestNeightbor(Block *westNeightbor);
-
-    Block *getEastNeightbor() const;
-
-    void setEastNeightbor(Block *eastNeightbor);
+    std::vector<Direction>& getCanTurnDirections();
 
 protected:
     Block* mNorthNeighbor;
@@ -37,6 +28,7 @@ protected:
     const double MAXSPEED;
     const bool IS_SOLID;
     Point coordinates;
+    std::vector<Direction> mCanTurnDirections;
 };
 
 #endif // BLOCK_H

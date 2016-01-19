@@ -6,6 +6,7 @@
 #include "block.h"
 #include <utility>
 #include <unordered_map>
+#include <car.h>
 
 using std::vector;
 using std::string;
@@ -28,19 +29,19 @@ private:
     std::unordered_map< std::pair<int,int>, Block*,DrawUtils::pairhash> mCurrentBlock;
     vector<vector<Block*> > mStreets;
     Point origin;
-    Point mThieve;
-    Point mPolice;
+    Car mThief;
+    Car mPolice;
     const float ACCELERATION = 0.3;
     const float MAX_SPEED = 2;
-    double dx;
-    double dy;
+    double mSpeedPolice;
+    double mSpeedThief;
     double mWorldWidth;
     double mWorldHeight;
     double mWorldLeft;
     double mWorldRight;
     double mWorldTop;
     double mWorldBottom;
-    bool mPoliceWillTurn, mPoliceWillStop, mThieveWillStop, mThieveWillTurn;
+    bool mPoliceWillTurnClockWise, mPoliceWillTurnCounterClockWise, mPoliceWillStop, mThieveWillStop, mThieveWillTurn;
 };
 
 

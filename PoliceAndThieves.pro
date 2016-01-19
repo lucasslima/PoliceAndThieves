@@ -1,5 +1,5 @@
 TEMPLATE = app
-CONFIG += opengl c++11 debug
+CONFIG += opengl c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     lowspeedblock.cpp \
     wallblock.cpp \
     hideoutblock.cpp \
-    drawutils.cpp
+    drawutils.cpp \
+    car.cpp
 LIBS += -lglut -lGLU
 
 DISTFILES +=
@@ -22,4 +23,5 @@ HEADERS += \
     lowspeedblock.h \
     wallblock.h \
     hideoutblock.h \
-    drawutils.h
+    drawutils.h \
+    car.h
