@@ -22,9 +22,12 @@ public:
     void render(void);
 
     void handleInput( char c, int x, int y);
+    void handleMouse(int button, int state, int x, int y);
+    void motion(int x, int y);
     ~World();
 
 private:
+    void checkColision(Car& mPolice,double oldX, double oldY, double& speed);
     std::unordered_map< std::pair<int,int>, std::vector<Block*>,DrawUtils::pairhash> mSpatialHash;
     std::unordered_map< std::pair<int,int>, Block*,DrawUtils::pairhash> mCurrentBlock;
     vector<vector<Block*> > mStreets;
@@ -41,7 +44,9 @@ private:
     double mWorldRight;
     double mWorldTop;
     double mWorldBottom;
-    bool mPoliceWillTurnClockWise, mPoliceWillTurnCounterClockWise, mPoliceWillStop, mThieveWillStop, mThieveWillTurn;
+    double mMouseX;
+    double mMouseY;
+    bool mPoliceWillTurnClockWise, mPoliceWillTurnCounterClockWise, mPoliceWillStop, mThiefWillStop, mThiefWillTurnClockWise, mThiefWillTurnCounterClockWise;
 };
 
 

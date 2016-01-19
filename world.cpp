@@ -75,6 +75,7 @@ void World::initializeRendering()
                 mThief.setPosition(b->getCoordinates()) ;
                 mThief.setX(mThief.getX() + Car::CAR_SIZE);
                 mThief.setY(mThief.getY() + Car::CAR_SIZE);
+                mThief.setOrientation(Direction::EAST);
                 found = true;
                 break;
             }
@@ -133,11 +134,14 @@ void World::loadStreets(string pathToMap) {
 
 void World::update()
 {
-    double oldX = mPolice.getX();
-    double oldY = mPolice.getY();
+    double oldPoliceX = mPolice.getX();
+    double oldPoliceY = mPolice.getY();
+    double oldThiefX = mThief.getX();
+    double oldThiefY = mThief.getY();
 
-    Block * policeBlock = mCurrentBlock[std::pair<int,int>(oldX,oldY)];
-    Block * thieveBlock = mCurrentBlock[std::pair<int,int>(mThief.getX(),mThief.getY())];
+    Block * policeBlock = mCurrentBlock[std::pair<int,int>(oldPoliceX,oldPoliceY)];
+    Block * thiefBlock = mCurrentBlock[std::pair<int,int>(mThief.getX(),mThief.getY())];
+
 
     if (mPoliceWillTurnClockWise){
         mPolice.changeOrientationClockWise();
@@ -156,57 +160,100 @@ void World::update()
         for (Direction d : policeBlock->getCanTurnDirections()){
             if (d == mPolice.getOrientation()){
                 mPoliceWillTurnCounterClockWise = false;
+                mPolice.setX(policeBlock->getCoordinates().getX() + 5);
+                mPolice.setY(policeBlock->getCoordinates().getY()  + 5);
             }
-            else
-                mPolice.changeOrientationClockWise();
         }
+        if (mPoliceWillTurnCounterClockWise)
+            mPolice.changeOrientationClockWise();
     }
-    if (mPolice.getOrientation() == Direction::WEST)
-        mPolice.setX(oldX - mSpeedPolice);
-    if (mPolice.getOrientation() == Direction::EAST)
-        mPolice.setX(oldX + mSpeedPolice);
-    if (mPolice.getOrientation() == Direction::NORTH)
-        mPolice.setY(oldY - mSpeedPolice);
-    if (mPolice.getOrientation() == Direction::SOUTH)
-        mPolice.setY(oldY + mSpeedPolice);
-    if (policeBlock == thieveBlock)
-        std::cout << "Found thieve! "<< std::endl;
-    if (typeid(*policeBlock) == typeid(HideoutBlock))
-        std::cout << "Police stoped on hideout" << std::endl;
 
-    Block * toMove = mCurrentBlock[std::pair<int,int>(mPolice.getX() -2.5,mPolice.getY() - 2.5)];
+    if (mThiefWillTurnClockWise){
+        mThief.changeOrientationClockWise();
+        for (Direction d : thiefBlock->getCanTurnDirections()){
+            if (d == mThief.getOrientation()){
+                mThiefWillTurnClockWise = false;
+                mThief.setX(thiefBlock->getCoordinates().getX() + 5);
+                mThief.setY(thiefBlock->getCoordinates().getY()  + 5);
+            }
+        }
+        if (mThiefWillTurnClockWise)
+            mThief.changeOrientationCounterClockWise();
+    }
+    if (mThiefWillTurnCounterClockWise){
+        mThief.changeOrientationCounterClockWise();
+        for (Direction d : thiefBlock->getCanTurnDirections()){
+            if (d == mThief.getOrientation()){
+                mThiefWillTurnCounterClockWise = false;
+                mThief.setX(thiefBlock->getCoordinates().getX() + 5);
+                mThief.setY(thiefBlock->getCoordinates().getY()  + 5);
+            }
+        }
+        if (mThiefWillTurnCounterClockWise)
+            mThief.changeOrientationClockWise();
+    }
+
+    if (mThief.getOrientation() == Direction::WEST)
+        mThief.setX(oldThiefX - mSpeedThief);
+    if (mThief.getOrientation() == Direction::EAST)
+        mThief.setX(oldThiefX + mSpeedThief);
+    if (mThief.getOrientation() == Direction::NORTH)
+        mThief.setY(oldThiefY - mSpeedThief);
+    if (mThief.getOrientation() == Direction::SOUTH)
+        mThief.setY(oldThiefY + mSpeedThief);
+
+    if (mPolice.getOrientation() == Direction::WEST)
+        mPolice.setX(oldPoliceX - mSpeedPolice);
+    if (mPolice.getOrientation() == Direction::EAST)
+        mPolice.setX(oldPoliceX + mSpeedPolice);
+    if (mPolice.getOrientation() == Direction::NORTH)
+        mPolice.setY(oldPoliceY - mSpeedPolice);
+    if (mPolice.getOrientation() == Direction::SOUTH)
+        mPolice.setY(oldPoliceY + mSpeedPolice);
+
+    if (policeBlock == thiefBlock)
+        std::cout << "Found thieve! "<< std::endl;
+    if (typeid(*thiefBlock) == typeid(HideoutBlock))
+        std::cout << "Thief Escaped!" << std::endl;
+    if (typeid(*policeBlock) == typeid(LowSpeedBlock) )
+        mSpeedPolice = policeBlock->getMAXSPEED();
+    if (typeid(*thiefBlock) == typeid(LowSpeedBlock) )
+        mSpeedThief = policeBlock->getMAXSPEED();
+
+    checkColision(mPolice,oldPoliceX,oldPoliceY,mSpeedPolice);
+    checkColision(mThief,oldThiefX,oldThiefY,mSpeedThief);
+    glutPostRedisplay();
+}
+
+void World::checkColision(Car& car,double oldX, double oldY, double& speed){
+    Block * toMove = mCurrentBlock[std::pair<int,int>(car.getX() -2.5,car.getY() - 2.5)];
     if (toMove->isSolid()){
-        mPolice.setX(oldX);
-        mPolice.setY(oldY);
-        mSpeedPolice = 0;
-        mSpeedThief = 0;
+        car.setX(oldX);
+        car.setY(oldY);
+        speed = 0;
     }
     else{
-        toMove = mCurrentBlock[std::pair<int,int>(mPolice.getX() + 2.5,mPolice.getY() + 2.5)];
+        toMove = mCurrentBlock[std::pair<int,int>(car.getX() + 2.5,car.getY() + 2.5)];
         if (toMove->isSolid()){
-            mPolice.setX(oldX);
-            mPolice.setY(oldY);
-            mSpeedPolice = 0;
-            mSpeedThief = 0;
+            car.setX(oldX);
+            car.setY(oldY);
+            speed = 0;
         }else{
-            toMove = mCurrentBlock[std::pair<int,int>(mPolice.getX() + 2.5,mPolice.getY())];
+            toMove = mCurrentBlock[std::pair<int,int>(car.getX() + 2.5,car.getY())];
             if (toMove->isSolid()){
-                mPolice.setX(oldX);
-                mPolice.setY(oldY);
-                mSpeedPolice = 0;
-                mSpeedThief = 0;
+                car.setX(oldX);
+                car.setY(oldY);
+                speed = 0;
             } else{
-                toMove = mCurrentBlock[std::pair<int,int>(mPolice.getX(),mPolice.getY() + 2.5)];
+                toMove = mCurrentBlock[std::pair<int,int>(car.getX(),car.getY() + 2.5)];
                 if (toMove->isSolid()){
-                    mPolice.setX(oldX);
-                    mPolice.setY(oldY);
-                    mSpeedPolice = 0;
-                    mSpeedThief = 0;
+                    car.setX(oldX);
+                    car.setY(oldY);
+                    speed = 0;
                 }
             }
         }
     }
-    glutPostRedisplay();
 }
 
 void World::render(void)
@@ -235,8 +282,13 @@ void World::handleInput(char c, int x, int y)
 {
     switch (c){
     case 'w':
-        if ( mSpeedThief < MAX_SPEED){
+        if ( mSpeedPolice < MAX_SPEED){
             mSpeedPolice += ACCELERATION;
+        }
+        break;
+    case 's':
+        if ( mSpeedPolice > 0){
+            mSpeedPolice -= ACCELERATION;
         }
         break;
     case 'd':
@@ -247,14 +299,61 @@ void World::handleInput(char c, int x, int y)
         }
         break;
     case 'a':
-        mPolice.changeOrientationCounterClockWise();
-        if (mSpeedPolice > -MAX_SPEED){
-            mSpeedThief = 0;
-            mSpeedPolice -= ACCELERATION;
+        if (!mPoliceWillTurnCounterClockWise){
+            if (mSpeedPolice < 1)
+                mSpeedPolice += ACCELERATION;
+            mPoliceWillTurnCounterClockWise = true;
         }
         break;
     default:
         break;
+    }
+}
+
+void World::handleMouse(int button, int state, int x, int y)
+{
+    if (button == GLUT_LEFT_BUTTON) {
+        if (state == GLUT_DOWN) {
+            mMouseX = (double)x;
+            mMouseY = (double)y;
+        }
+    }
+    glutPostRedisplay();
+}
+
+void World::motion(int x, int y)
+{
+    int deltaX = (x - (int)mMouseX);
+    int deltaY = (y - (int)mMouseY);
+    int precision = 100;
+    if (abs(deltaX) > abs(deltaY)) {
+        if (abs(deltaX) > precision) {
+            if (deltaX > 0) {
+                if (mThief.getOrientation() == Direction::EAST){
+                    if (mSpeedThief < MAX_SPEED)
+                        mSpeedThief += ACCELERATION;
+                }
+                else
+                    mThiefWillTurnClockWise = true;
+            } else {
+                if (mThief.getOrientation() == Direction::WEST){
+                    if (mSpeedThief < MAX_SPEED)
+                        mSpeedThief += ACCELERATION;
+                }
+                else
+                    mPoliceWillTurnCounterClockWise = true;
+            }
+            glutPostRedisplay();
+        }
+    } else {
+        if (abs(deltaY) > precision) {
+            if (deltaY > 0) {
+                mThiefWillTurnCounterClockWise = true;
+            } else {
+                mThiefWillTurnClockWise = true;
+            }
+            glutPostRedisplay();
+        }
     }
 }
 World::~World(){
