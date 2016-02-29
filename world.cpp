@@ -43,7 +43,7 @@ void World::initializeRendering()
     for ( int i = 0 ; i < mStreets.size(); i++ ){
         for ( int j = 0 ; j < mStreets[i].size(); j++ ){
             Block* b = mStreets[i][j];
-            b->setCoordinates(p.getX(),p.getY());
+            b->setCoordinates(p.getX(), p.getY(), p.getZ());
             if ( i > 0 && !mStreets[i-1][j]->isSolid())
                 b->getCanTurnDirections().push_back(Direction::NORTH);
             if (j > 0 && !mStreets[i][j-1]->isSolid())

@@ -109,6 +109,6 @@ namespace DrawUtils {
 
     void drawPoligon(std::vector<Point> &points);
 
-    void drawCube(int size, const Point &point);
+    void drawCube(float size, const Point &point);
 }
 #endif // DRAWUTILS_H

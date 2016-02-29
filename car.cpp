@@ -1,5 +1,4 @@
 #include "car.h"
-#include "drawutils.h"
 #include "block.h"
 
 using DrawUtils::Point;
@@ -47,13 +46,9 @@ void Car::setPosition(const Point &position)
 
 void Car::draw()
 {
-    std::vector<Point> blockDrawPoints;
-    blockDrawPoints.push_back(Point(mPosition.getX(),mPosition.getY()+CAR_SIZE));
-    blockDrawPoints.push_back(Point(mPosition.getX() + CAR_SIZE, mPosition.getY() + CAR_SIZE));
-    blockDrawPoints.push_back(Point(mPosition.getX() + CAR_SIZE,mPosition.getY()));
-    blockDrawPoints.push_back(mPosition);
+
     glColor3d(1.0,0.0,0.0);
-    DrawUtils::drawPoligon(blockDrawPoints);
+    DrawUtils::drawCube(CAR_SIZE, mPosition);
 }
 
 int Car::getOrientation() const
@@ -83,5 +78,5 @@ void Car::changeOrientationClockWise()
 }
 
 bool checkColision(Block * b){
-
+    return false;
 }
