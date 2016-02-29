@@ -1,6 +1,5 @@
 #include <iostream>
 #include <GL/glut.h>
-#include <GL/gl.h>
 #include "world.h"
 
 using namespace std;
@@ -30,6 +29,9 @@ void iniciaOpenGL(void)
 {
     world.initializeRendering();
 }
+void reshape(GLsizei width, GLsizei height){
+    world.reshape(width,height);
+}
 void motion(int x, int y){
     world.motion(x,y);
 }
@@ -42,6 +44,7 @@ int main(int argc, char *argv[])
     world.loadStreets("map.txt");
     glutCreateWindow("PoliceAndThieves");
     glutDisplayFunc(render);
+    glutReshapeFunc(reshape);
     glutIdleFunc(update);
     glutKeyboardFunc(input);
     glutMouseFunc(mouse);

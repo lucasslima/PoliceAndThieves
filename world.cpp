@@ -28,16 +28,23 @@ void World::initializeRendering()
     mSpeedThief = 0;
     if (mStreets.size() == 0)
         return;
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
     mWorldHeight = mStreets.size() * Block::BLOCK_SIZE;
     mWorldWidth = mStreets[0].size() * Block::BLOCK_SIZE;
-    origin = Point(0, 0, 0);
+    origin = Point(-mWorldWidth/2,mWorldHeight/2,0);
     mWorldLeft = 0;
     mWorldRight = mWorldWidth;
     mWorldBottom = 0;
     mWorldTop = mWorldHeight;
-    gluOrtho2D(mWorldLeft, mWorldRight, mWorldTop, mWorldBottom);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+    glClearDepth(1.0f);                   // Set background depth to farthest
+    glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
+    glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+    glShadeModel(GL_SMOOTH);   // Enable smooth shading
+//    glEnable(GL_LIGHTING);
+//    glEnable(GL_NORMALIZE);
+//    glEnable(GL_LIGHT0);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
     glMatrixMode(GL_MODELVIEW);
     Point p(origin);
     for ( int i = 0 ; i < mStreets.size(); i++ ){
@@ -61,9 +68,40 @@ void World::initializeRendering()
             p.setX(p.getX() + Block::BLOCK_SIZE);
 
         }
-        p.setX(origin.getX());
-        p.setY(p.getY() + Block::BLOCK_SIZE);
+        p.setX(-mWorldWidth/2);
+        p.setY(p.getY() - Block::BLOCK_SIZE);
     }
+
+
+    float observerHeight = 150;
+
+    gluLookAt(0, 0, observerHeight, 0, 0, 0, 0.0,1.0,0);
+
+//    GLfloat mat_ambient[]={1.0, 1.0, 0.0, 1.0};
+//    GLfloat mat_diffuse[]={0.6, 0.6, 0.0, 1.0};
+//    GLfloat mat_specular[]={0.4, 0.4, 0.0, 1.0};
+//    GLfloat mat_shininess={50.0};
+//    GLfloat light_ambient[]={0.3, 0.3, 0.3, 1.0};
+//    GLfloat light_diffuse[]={0.6, 0.6, 0.6, 1.0};
+//    GLfloat light_specular[]={0.6, 0.6, 0.6, 1.0};
+//
+//    float lightPositionX = 0;
+//    float lightPositionZ = 85;
+//
+//    GLfloat light_position[]={lightPositionX,0,observerHeight ,0.5};
+//
+//
+//    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+//    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+//    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+//
+//    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+//
+//    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+//    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+//    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+//    glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
+
     bool found = false;
     for (auto v : mStreets){
         for (Block* b : v){
@@ -94,7 +132,20 @@ void World::initializeRendering()
     }
     return;
 }
+void World::reshape(GLsizei width, GLsizei height){
+    // Compute aspect ratio of the new window
+    if (height == 0) height = 1;                // To prevent divide by 0
+    GLfloat aspect = (GLfloat)width / (GLfloat)height;
 
+    // Set the viewport to cover the new window
+    glViewport(0, 0, width, height);
+
+    // Set the aspect ratio of the clipping volume to match the viewport
+    glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
+    glLoadIdentity();             // Reset
+    // Enable perspective projection with fovy, aspect, zNear and zFar
+    gluPerspective(90.0f, aspect, 1, 700.0f);
+}
 void World::loadStreets(string pathToMap) {
   ifstream mapFile(pathToMap);
   if (mapFile.is_open()) {
@@ -194,18 +245,18 @@ void World::update()
     if (mThief.getOrientation() == Direction::EAST)
         mThief.setX(oldThiefX + mSpeedThief);
     if (mThief.getOrientation() == Direction::NORTH)
-        mThief.setY(oldThiefY - mSpeedThief);
-    if (mThief.getOrientation() == Direction::SOUTH)
         mThief.setY(oldThiefY + mSpeedThief);
+    if (mThief.getOrientation() == Direction::SOUTH)
+        mThief.setY(oldThiefY - mSpeedThief);
 
     if (mPolice.getOrientation() == Direction::WEST)
         mPolice.setX(oldPoliceX - mSpeedPolice);
     if (mPolice.getOrientation() == Direction::EAST)
         mPolice.setX(oldPoliceX + mSpeedPolice);
     if (mPolice.getOrientation() == Direction::NORTH)
-        mPolice.setY(oldPoliceY - mSpeedPolice);
-    if (mPolice.getOrientation() == Direction::SOUTH)
         mPolice.setY(oldPoliceY + mSpeedPolice);
+    if (mPolice.getOrientation() == Direction::SOUTH)
+        mPolice.setY(oldPoliceY - mSpeedPolice);
 
     if (policeBlock == thiefBlock)
         std::cout << "Found thieve! "<< std::endl;
@@ -254,21 +305,16 @@ void World::checkColision(Car& car,double oldX, double oldY, double& speed){
 
 void World::render(void)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Point pen(origin.getX(), origin.getY(), origin.getZ());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    //glLoadIdentity();
     for (std::vector<Block*> v : mStreets){
-        for (Block* b : v){
+        for (Block* b : v)
             b->draw();
-            pen.setX(pen.getX() + 10);
-            if (b == v.back())
-                pen.setX(-165);
-        }
-        pen.setY(pen.getY() + 10);
     }
     mPolice.draw();
     mThief.draw();
-    glFlush();
     glutSwapBuffers();
 }
 

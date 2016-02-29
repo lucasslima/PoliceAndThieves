@@ -20,6 +20,7 @@ public:
     void initializeRendering();
     void update();
     void render(void);
+    void reshape(GLsizei width, GLsizei height);
 
     void handleInput( char c, int x, int y);
     void handleMouse(int button, int state, int x, int y);

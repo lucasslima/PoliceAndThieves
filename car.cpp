@@ -47,8 +47,10 @@ void Car::setPosition(const Point &position)
 void Car::draw()
 {
 
-    glColor3d(1.0,0.0,0.0);
-    DrawUtils::drawCube(CAR_SIZE, mPosition);
+    glPushMatrix();
+        glColor3d(1.0,0.0,0.0);
+        DrawUtils::drawCube(CAR_SIZE, mPosition);
+    glPopMatrix();
 }
 
 int Car::getOrientation() const
