@@ -12,9 +12,9 @@ double Block::getMAXSPEED() const
 }
 
 //x and y must correspond to the center of the block
-void Block::setCoordinates(double x, double y)
+void Block::setCoordinates(double x, double y, double z)
 {
-    coordinates = Point(x,y);
+    coordinates = Point(x, y, z);
 }
 
 DrawUtils::Point Block::getCoordinates() const

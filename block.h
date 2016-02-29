@@ -2,7 +2,7 @@
 #define BLOCK_H
 #include "drawutils.h"
 #include <vector>
-#include <car.h>
+#include "car.h"
 
 using DrawUtils::Point;
 
@@ -13,7 +13,8 @@ public:
     virtual void draw()=0;
     virtual ~Block();
     double getMAXSPEED() const;
-    void setCoordinates(double x, double y);
+
+    void setCoordinates(double x, double y, double z);
     Point getCoordinates() const;
     bool isSolid() const;
     static const double BLOCK_SIZE;

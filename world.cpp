@@ -1,14 +1,10 @@
 #include "world.h"
-#include <string>
 #include <fstream>
 #include "highspeedblock.h"
 #include "lowspeedblock.h"
 #include "hideoutblock.h"
 #include "wallblock.h"
-#include "GL/gl.h"
 #include "GL/glut.h"
-#include <utility>
-#include "block.h"
 #include <iostream>
 #include <typeinfo>
 
@@ -36,7 +32,7 @@ void World::initializeRendering()
     glLoadIdentity();
     mWorldHeight = mStreets.size() * Block::BLOCK_SIZE;
     mWorldWidth = mStreets[0].size() * Block::BLOCK_SIZE;
-    origin = Point(0,0);
+    origin = Point(0, 0, 0);
     mWorldLeft = 0;
     mWorldRight = mWorldWidth;
     mWorldBottom = 0;
@@ -258,9 +254,9 @@ void World::checkColision(Car& car,double oldX, double oldY, double& speed){
 
 void World::render(void)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Point pen(origin.getX(),origin.getY());
+    Point pen(origin.getX(), origin.getY(), origin.getZ());
     for (std::vector<Block*> v : mStreets){
         for (Block* b : v){
             b->draw();
