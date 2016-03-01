@@ -12,11 +12,6 @@ using std::string;
 using std::ifstream;
 using std::pair;
 
-void quadrado(const Point &p)
-{
-
-}
-
 World::World() {
     mPoliceWillTurnClockWise = false;
     mPoliceWillTurnCounterClockWise = false;
@@ -31,17 +26,15 @@ void World::initializeRendering()
     mWorldHeight = mStreets.size() * Block::BLOCK_SIZE;
     mWorldWidth = mStreets[0].size() * Block::BLOCK_SIZE;
     origin = Point(-mWorldWidth/2,mWorldHeight/2,0);
-    mWorldLeft = 0;
-    mWorldRight = mWorldWidth;
-    mWorldBottom = 0;
-    mWorldTop = mWorldHeight;
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
-//    glClearDepth(1.0f);                   // Set background depth to farthest
+    glClearDepth(1.0f);                   // Set background depth to farthest
     glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
     glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
     glShadeModel(GL_SMOOTH);   // Enable smooth shading
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
     glMatrixMode(GL_MODELVIEW);
     Point p(origin);
@@ -71,7 +64,7 @@ void World::initializeRendering()
     }
 
 
-    float observerHeight = 150;
+    float observerHeight = 125;
 
     gluLookAt(0, 0, observerHeight, 0, 0, 0, 0.0,1.0,0);
 
@@ -118,6 +111,7 @@ void World::reshape(GLsizei width, GLsizei height){
     glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
     glLoadIdentity();             // Reset
     // Enable perspective projection with fovy, aspect, zNear and zFar
+
     gluPerspective(90.0f, aspect, 0.1, -900.0f);
 }
 void World::loadStreets(string pathToMap) {
