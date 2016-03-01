@@ -39,7 +39,7 @@ void motion(int x, int y){
 int main(int argc, char *argv[])
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE );
     glutInitWindowSize(1600, 900);
     world.loadStreets("map.txt");
     glutCreateWindow("PoliceAndThieves");

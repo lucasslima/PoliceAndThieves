@@ -37,13 +37,11 @@ void World::initializeRendering()
     mWorldTop = mWorldHeight;
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
-    glClearDepth(1.0f);                   // Set background depth to farthest
+//    glClearDepth(1.0f);                   // Set background depth to farthest
     glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
     glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
     glShadeModel(GL_SMOOTH);   // Enable smooth shading
-//    glEnable(GL_LIGHTING);
-//    glEnable(GL_NORMALIZE);
-//    glEnable(GL_LIGHT0);
+
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
     glMatrixMode(GL_MODELVIEW);
     Point p(origin);
@@ -77,30 +75,6 @@ void World::initializeRendering()
 
     gluLookAt(0, 0, observerHeight, 0, 0, 0, 0.0,1.0,0);
 
-//    GLfloat mat_ambient[]={1.0, 1.0, 0.0, 1.0};
-//    GLfloat mat_diffuse[]={0.6, 0.6, 0.0, 1.0};
-//    GLfloat mat_specular[]={0.4, 0.4, 0.0, 1.0};
-//    GLfloat mat_shininess={50.0};
-//    GLfloat light_ambient[]={0.3, 0.3, 0.3, 1.0};
-//    GLfloat light_diffuse[]={0.6, 0.6, 0.6, 1.0};
-//    GLfloat light_specular[]={0.6, 0.6, 0.6, 1.0};
-//
-//    float lightPositionX = 0;
-//    float lightPositionZ = 85;
-//
-//    GLfloat light_position[]={lightPositionX,0,observerHeight ,0.5};
-//
-//
-//    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-//    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-//    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-//
-//    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-//
-//    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-//    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-//    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-//    glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
 
     bool found = false;
     for (auto v : mStreets){
@@ -144,7 +118,7 @@ void World::reshape(GLsizei width, GLsizei height){
     glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
     glLoadIdentity();             // Reset
     // Enable perspective projection with fovy, aspect, zNear and zFar
-    gluPerspective(90.0f, aspect, 1, 700.0f);
+    gluPerspective(90.0f, aspect, 0.1, -900.0f);
 }
 void World::loadStreets(string pathToMap) {
   ifstream mapFile(pathToMap);
@@ -309,12 +283,15 @@ void World::render(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     //glLoadIdentity();
-    for (std::vector<Block*> v : mStreets){
-        for (Block* b : v)
-            b->draw();
-    }
-    mPolice.draw();
-    mThief.draw();
+    glPushMatrix();
+        for (std::vector<Block*> v : mStreets){
+            for (Block* b : v)
+                b->draw();
+        }
+        mPolice.draw();
+        mThief.draw();
+    glPopMatrix();
+
     glutSwapBuffers();
 }
 
