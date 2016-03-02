@@ -8,6 +8,7 @@ const double Car::CAR_SIZE = 2.5;
 Car::Car()
 {
     Point position;
+
 }
 
 Car::Car(Point p):mPosition(p)
