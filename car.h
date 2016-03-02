@@ -1,5 +1,7 @@
 #ifndef CAR_H
 #define CAR_H
+#include <windows.h>
+
 #include "drawutils.h"
 
 using DrawUtils::Point;

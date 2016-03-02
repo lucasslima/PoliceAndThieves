@@ -2,6 +2,7 @@
 #define HIDEOUTBLOCK_H
 #include "block.h"
 
+
 class HideoutBlock : public Block
 {
 public:

@@ -1,5 +1,6 @@
 #include "world.h"
 #include <fstream>
+#include <iostream>
 #include "highspeedblock.h"
 #include "lowspeedblock.h"
 #include "hideoutblock.h"
@@ -7,6 +8,8 @@
 #include "GL/glut.h"
 #include <iostream>
 #include <typeinfo>
+
+using namespace std;
 
 using std::string;
 using std::ifstream;
@@ -116,6 +119,7 @@ void World::reshape(GLsizei width, GLsizei height){
 }
 void World::loadStreets(string pathToMap) {
   ifstream mapFile(pathToMap);
+
   if (mapFile.is_open()) {
     string line;
     while (getline(mapFile, line)) {
@@ -145,6 +149,10 @@ void World::loadStreets(string pathToMap) {
       enclosedStreet = false;
     }
    }
+   else
+   {
+       cout<< "could not open the file : " << pathToMap <<endl;
+    }
 }
 
 void World::update()

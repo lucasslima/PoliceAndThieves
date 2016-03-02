@@ -1,6 +1,6 @@
 #ifndef DRAWUTILS_H
 #define DRAWUTILS_H
-
+#include <windows.h>
 #include <GL/gl.h>
 #include <vector>
 #include <exception>
@@ -100,7 +100,7 @@ namespace DrawUtils {
         }
 
         ~Point() {
-            delete coordinates;
+           // delete coordinates;
         }
 
     private:

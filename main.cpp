@@ -1,5 +1,7 @@
+#include <windows.h>
 #include <iostream>
 #include <GL/glut.h>
+
 #include "world.h"
 
 using namespace std;
@@ -41,7 +43,9 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(1600, 900);
-    world.loadStreets("map.txt");
+
+    world.loadStreets("C:\\Users\\Ailton\\PoliceAndThieves\\map.txt");
+
     glutCreateWindow("PoliceAndThieves");
     glutDisplayFunc(render);
     glutReshapeFunc(reshape);

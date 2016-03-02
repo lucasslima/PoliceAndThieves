@@ -1,5 +1,7 @@
 #ifndef WALLBLOCK_H
 #define WALLBLOCK_H
+#include <windows.h>
+
 #include "block.h"
 
 class WallBlock : public Block
