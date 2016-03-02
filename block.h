@@ -1,5 +1,7 @@
 #ifndef BLOCK_H
 #define BLOCK_H
+#include <windows.h>
+
 #include "drawutils.h"
 #include <vector>
 #include "car.h"

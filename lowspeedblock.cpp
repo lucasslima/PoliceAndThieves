@@ -1,3 +1,4 @@
+
 #include "lowspeedblock.h"
 
 LowSpeedBlock::LowSpeedBlock():Block(0.7,false)

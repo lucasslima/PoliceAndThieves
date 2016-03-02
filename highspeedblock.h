@@ -1,5 +1,7 @@
 #ifndef HIGHSPEEDBLOCK_H
 #define HIGHSPEEDBLOCK_H
+#include <windows.h>
+
 #include "block.h"
 
 class HighSpeedBlock : public Block

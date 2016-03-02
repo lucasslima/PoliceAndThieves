@@ -1,5 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
+#include <windows.h>
+
 #include <vector>
 #include <string>
 #include "drawutils.h"

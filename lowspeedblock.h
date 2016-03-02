@@ -1,5 +1,7 @@
 #ifndef LOWSPEEDBLOCK_H
 #define LOWSPEEDBLOCK_H
+#include <windows.h>
+
 #include "block.h"
 
 
